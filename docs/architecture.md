@@ -82,4 +82,4 @@ or microservice infrastructure is needed for this demonstration.
 - [Python sqlite3](https://docs.python.org/3/library/sqlite3.html)
 - [Codex MCP setup](https://learn.chatgpt.com/docs/extend/mcp)
 
-Dependencies were installed and tested together; see the [verification record](verification.md).
+See the [verification guide](verification.md) for checks to run against your installation.

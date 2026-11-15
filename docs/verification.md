@@ -1,73 +1,34 @@
-# Verification record
+# Verification guide
 
-Initial verification: **13 November 2026**. Root-folder handover verification:
-**15 November 2026**. Environment: Windows, CPython **3.12.14**, SQLite **3.53.1**.
+Run these commands from the repository root after creating `.venv` and installing `requirements-dev.txt`:
 
-## Actual results
+~~~powershell
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m ruff check .
+.\.venv\Scripts\python.exe -m ruff format --check .
+.\.venv\Scripts\python.exe -m scripts.smoke_mcp
+~~~
 
-| Check | Observed result |
-| --- | --- |
-| `python -m pytest -q` | **23 passed**; includes a real MCP stdio subprocess and real HTTP API subprocess |
-| `python -m scripts.smoke_mcp` | Passed; discovered exactly four tools; two temporary tasks survived API process restart |
-| `python -m ruff check .` | All checks passed |
-| `python -m ruff format --check .` | All Python files formatted |
-| `python -m pip check` | No broken requirements |
-| `node --check static/app.js` | JavaScript syntax passed |
-| Prettier HTML/CSS/JS formatting | Source formatted consistently; no frontend build dependency added |
-| Documentation/config checks | Local documentation links resolve; TOML points to the new project root; recreate `.venv` after extraction |
-| Normal uvicorn startup | Started successfully on `127.0.0.1:8000` |
-| Browser task-list rendering | Reviewed user-supplied task-list screenshots; automated browser click-through was unavailable |
-| Live assistant evidence | Reviewed ChatGPT desktop screenshots of actual Create task and List tasks results, matching app task ID 1 |
+If Node.js is installed, JavaScript syntax can also be checked with:
 
-The installed local CLI reported `codex-cli 0.167.0-alpha.4.1` during the initial
-build. User-supplied desktop evidence was reviewed on 14 November 2026; see the
-[screenshot index](screenshots.md). Renaming the project requires updating the
-existing MCP launch paths before reconnecting.
+~~~powershell
+node --check static/app.js
+~~~
 
-## What the tests prove
+## Automated coverage
 
-- Persistent creation with generated IDs, trimming, correct defaults, and valid leap dates.
-- Partial update preservation, explicit clearing, empty-update behavior, completion idempotence,
-  reopening, and persistence across both a new API instance and a real process restart.
-- Combined exact course/completed/date filters, inclusive cutoff, and undated exclusion.
-- Parameterized SQL handling of SQL-like course input.
-- Rejection of malformed dates, empty/null titles, unexpected fields, invalid booleans,
-  and updates that clear required fields; rejected writes leave saved data unchanged.
-- HTTP 404 for missing IDs, 422 for invalid queries, local static/API serving,
-  and rejection of cross-origin browser writes/untrusted hostnames.
-- Database location independence from the launch directory.
-- Real MCP initialization/discovery and calls for all four tools against live HTTP storage.
-- Data visibility in both directions, correct tool errors for invalid dates, unknown IDs,
-  unknown fields, and an unavailable API.
+`tests/test_uniplan.py` checks API creation and filtering, trimmed fields, sparse updates, clearing optional fields, real dates, rejected fields and values, missing IDs, completion and reopening, SQLite persistence, static file serving, and local origin/host checks.
 
-The automated 'web-created' smoke record is created through the browser's HTTP
-route using an HTTP client. It proves the common API path, not browser interaction.
-All automated data is temporary; the normal personal database is not used by tests.
+The integration check runs `scripts/smoke_mcp.py`. It starts a real temporary HTTP API and MCP stdio subprocess, discovers all four tools, verifies shared data and validation errors, and restarts the API to check persistence. The tests and script use isolated temporary databases rather than the root `tasks.db`.
 
-## Tested dependencies
+A record created by the smoke script through HTTP proves the API path. It does not prove that a browser or an assistant conversation was manually exercised.
 
-| Dependency | Version |
-| --- | --- |
-| FastAPI | 0.162.5 |
-| Uvicorn | 0.54.0 |
-| HTTPX | 0.28.1 |
-| Official MCP SDK | 2.3.0 |
-| Pydantic | 2.14.3 |
-| Starlette (transitive) | 1.10.0 |
-| pytest (development) | 9.2.0 |
-| Ruff (development) | 0.17.5 |
+## Manual demonstration
 
-Direct dependencies are pinned. Transitive dependencies are resolved by pip;
-[tested-environment.txt](reference/tested-environment.txt) records every installed version from the verified Windows
-environment. It is an audit record, not a cross-platform requirements file.
+Follow [the demonstration guide](demo.md) to verify the web page and a connected assistant together. Check task creation, filters, editing, clearing optional fields, completion, reopening, persistence, and visible failure messages. Also inspect keyboard navigation and narrow window layouts.
 
-## Remaining manual acceptance
+## Dependencies and evidence
 
-- Open the page at desktop and narrow/mobile widths; check legibility and horizontal overflow.
-- Create a task, use each filter, edit/clear fields, complete, and reopen through the page.
-- Check empty states, keyboard navigation, modal Escape/Cancel, and visible failure feedback.
-- Repeat [the demo](demo.md) after extracting and updating the MCP paths if a new
-  live presentation is needed. Existing desktop evidence is in the screenshot index.
+Runtime versions are pinned in `requirements.txt`; test and lint tools are pinned in `requirements-dev.txt`. Transitive dependencies are resolved during installation.
 
-The protocol test does not itself establish visual or live assistant acceptance.
-Screenshot evidence is separate and limited to what the images visibly show.
+This public repository does not include screenshots, a screenshot index, the original assignment brief, or the full installed-environment audit. It makes no claim that those artifacts can be opened here. Historical slide, image, and browser-check counts are not acceptance criteria for this code sample.

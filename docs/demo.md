@@ -2,7 +2,7 @@
 
 ## Automated protocol demonstration
 
-From the extracted `code_sample_MCP` root, after installing dependencies, run:
+From the cloned or extracted repository root, after installing dependencies, run:
 
 ```powershell
 .\.venv\Scripts\python.exe -m scripts.smoke_mcp
