@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A simple home for your university tasks."
+    />
+    <title>UniPlan · Your study space</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <!-- One local page, with semantic landmarks and no external assets. -->
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="UniPlan home"
+          ><span class="brand-mark">U<span>↗</span></span
+          >UniPlan</a
+        >
+        <span class="local-label"
+          ><span class="dot"></span>Your local study space</span
+        >
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <p class="eyebrow">A LITTLE STRUCTURE. MORE HEADSPACE.</p>
+          <h1 id="page-title">
+            Make room for<br />your next <em>small win.</em>
+          </h1>
+          <div class="intro-bottom">
+            <p>
+              Coursework, deadlines, and everything in between.<br />Keep your
+              university day in one simple place.
+            </p>
+            <p id="today" class="today"></p>
+          </div>
+        </section>
+
+        <!-- Create and edit use separate forms so their state cannot be confused. -->
+        <section class="composer panel" aria-labelledby="add-title">
+          <div class="section-heading">
+            <span class="section-number">01</span>
+            <h2 id="add-title">What's next?</h2>
+            <span class="muted optional-note">Start with one task.</span>
+          </div>
+          <form id="create-form">
+            <div class="create-fields">
+              <label class="title-field"
+                >Task title
+                <input
+                  name="title"
+                  placeholder="e.g. Finish the EAI assignment"
+                  maxlength="200"
+                  required
+                  autocomplete="off"
+              /></label>
+              <label
+                >Course <span class="optional">optional</span
+                ><input
+                  name="course"
+                  placeholder="e.g. EAI"
+                  maxlength="80"
+                  autocomplete="off"
+              /></label>
+              <label
+                >Due date <span class="optional">optional</span
+                ><input
+                  type="date"
+                  name="due_date"
+                  min="0001-01-01"
+                  max="9999-12-31"
+              /></label>
+              <button class="primary add-button" type="submit">
+                Add task <span aria-hidden="true">＋</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Live feedback reports saved IDs and failed operations without hiding errors. -->
+        <p
+          id="notice"
+          class="notice"
+          role="status"
+          aria-live="polite"
+          hidden
+        ></p>
+        <p id="error" class="error" role="alert" hidden></p>
+
+        <section class="tasks-section" aria-labelledby="tasks-title">
+          <div class="task-heading">
+            <div class="section-heading">
+              <span class="section-number">02</span>
+              <h2 id="tasks-title">Your tasks</h2>
+              <span id="task-count" class="count">0</span>
+            </div>
+            <button id="refresh" class="quiet" type="button">
+              <span aria-hidden="true">↻</span> Refresh
+            </button>
+          </div>
+          <form id="filter-form" class="filters">
+            <label
+              >Status<select name="completed">
+                <option value="">All tasks</option>
+                <option value="false">To do</option>
+                <option value="true">Completed</option>
+              </select></label
+            >
+            <label
+              >Course<input
+                name="course"
+                placeholder="All courses"
+                maxlength="80"
+            /></label>
+            <label
+              >Due on or before<input
+                type="date"
+                name="due_before"
+                min="0001-01-01"
+                max="9999-12-31"
+            /></label>
+            <button type="submit" class="secondary">Apply filters</button>
+            <button type="reset" class="quiet">Clear</button>
+          </form>
+          <p class="list-caption" id="list-caption">Loading your tasks…</p>
+          <div id="task-list" class="task-list" aria-busy="true"></div>
+          <div id="empty-state" class="empty-state" hidden>
+            <span aria-hidden="true" class="empty-icon">✓</span>
+            <h3>A clear space to begin.</h3>
+            <p>Add your first task above. Small steps count.</p>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <span
+          >UniPlan <span class="footer-separator">/</span> One task at a
+          time.</span
+        ><span
+          >Stored on this laptop · <a href="/docs">API reference ↗</a></span
+        >
+      </footer>
+    </div>
+
+    <!-- Native dialog provides keyboard focus management and Escape-to-close. -->
+    <dialog id="edit-dialog" aria-labelledby="edit-title">
+      <form id="edit-form">
+        <p class="eyebrow">A CHANGE OF PLAN</p>
+        <h2 id="edit-title">Edit task</h2>
+        <p id="edit-id" class="muted"></p>
+        <label
+          >Task title<input
+            name="title"
+            maxlength="200"
+            required
+            autocomplete="off"
+        /></label>
+        <label
+          >Course <span class="optional">optional</span
+          ><input name="course" maxlength="80"
+        /></label>
+        <label
+          >Due date <span class="optional">optional</span
+          ><input name="due_date" type="date" min="0001-01-01" max="9999-12-31"
+        /></label>
+        <label class="checkbox-label"
+          ><input type="checkbox" name="completed" /> Completed</label
+        >
+        <p id="edit-error" class="error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button id="cancel-edit" class="secondary" type="button">
+            Cancel</button
+          ><button type="submit" class="primary">Save changes</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

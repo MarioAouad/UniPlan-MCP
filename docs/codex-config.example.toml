@@ -1,0 +1,13 @@
+# Merge this section into your Codex config; preserve all unrelated settings.
+# Create .venv from the root README before using this configuration.
+# These paths target the renamed folder on the original laptop.
+# If you extract elsewhere, update BOTH paths below.
+[mcp_servers.uniplan]
+command = 'C:\Users\MA21\Desktop\USJ\Final_Year\1th_semeter\Enterprises_Application_Integration\MCP_Connector_Deliverales\code_sample_MCP\.venv\Scripts\python.exe'
+args = ['C:\Users\MA21\Desktop\USJ\Final_Year\1th_semeter\Enterprises_Application_Integration\MCP_Connector_Deliverales\code_sample_MCP\mcp_server.py']
+startup_timeout_sec = 15
+tool_timeout_sec = 20
+
+# Start the FastAPI process separately before invoking tools.
+[mcp_servers.uniplan.env]
+APP_BASE_URL = 'http://127.0.0.1:8000'

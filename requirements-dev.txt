@@ -1,0 +1,4 @@
+# Development tools are optional when only running the application.
+-r requirements.txt
+pytest==9.2.0
+ruff==0.17.5

@@ -1,0 +1,16 @@
+# Local Python environments and bytecode, anywhere in the workspace.
+.venv/
+__pycache__/
+*.py[cod]
+
+# Disposable tool caches and verification output.
+.pytest_cache/
+.ruff_cache/
+test-results/
+tmp/
+
+# Personal runtime data and logs; keep these out of source control.
+*.db
+*.db-*
+*.log
+*.zip
